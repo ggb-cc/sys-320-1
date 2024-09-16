@@ -2,7 +2,7 @@
 
 
 
-function LogOnOffSince ($startpoint)
+function GetLogOnOffSince ($startpoint)
 {
 
     $loginouts = Get-EventLog System -Source Microsoft-Windows-Winlogon -After (get-date).AddDays(-$startpoint) 
@@ -25,11 +25,11 @@ function LogOnOffSince ($startpoint)
                                              "User : " = $userName;
                                             }
     }
-    $loginoutsTable
+    return $loginoutsTable
 }
 
 
-function PowerOnOffSince ($startpoint)
+function GetPowerOnOffSince ($startpoint)
 {
 
     $powerOnOffs = Get-EventLog system -After (get-date).AddDays(-$startpoint) | Where-Object {($_.EventID -eq 6006) -or ($_.EventID -eq 6005)}  
@@ -40,8 +40,8 @@ function PowerOnOffSince ($startpoint)
     {
         $event = ""
 
-        if ($powerOnOffs[$i].Message -ilike "*started*"){$event = "Shutdown"}
-        if ($powerOnOffs[$i].Message -ilike "*stopped*"){$event = "Startup"}
+        if ($powerOnOffs[$i].Message -ilike "*started*"){$event = "Startup"}
+        if ($powerOnOffs[$i].Message -ilike "*stopped*"){$event = "Shutdown"}
 
         $userName = "System"
 
@@ -51,5 +51,8 @@ function PowerOnOffSince ($startpoint)
                                                "User : " = $userName;
                                               }
     }
-    $powerOnOffsTable
+    return $powerOnOffsTable
 }
+
+
+
