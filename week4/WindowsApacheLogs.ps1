@@ -16,18 +16,21 @@
 #$a = Get-ChildItem C:\xampp\apache\logs\*.log | select-string 'error'
 #$a[-1..-5]
 # (7
-$notFounds = Get-Content C:\xampp\apache\logs\access.log #| select-string ' 404 ', ' 400 '
-$regex = [regex] "/[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/"
+$notFounds = Get-Content C:\xampp\apache\logs\access.log | select-string ' 404 ', ' 400 '
+$regex = [regex] "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}"
 
 $ipsUnorgonized = $regex.Matches($notFounds)
-
-
-
-$ipsUnorgonized
-
 
 $ips = @()
 
 for ($i = 0 ; $i -lt $ipsUnorgonized.count; $i++){
-    $ips += [pscustomobject]@{}
+    $ips += [pscustomobject]@{"IP" = $ipsUnorgonized[$i].value; }
 }
+
+$ips | Where-Object { $_.IP -ilike "10.*"}
+
+# (8
+
+$ipsoftens = $ips | Where-Object { $_.IP -ilike "10.*"}
+$counts = $ipsoftens | group IP
+$counts  | Select-Object Count, Name
