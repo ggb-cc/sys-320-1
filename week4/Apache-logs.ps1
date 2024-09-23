@@ -15,10 +15,9 @@ for ($i = 0 ; $i -lt $ipsUnorgonized.count; $i++){
 
 $ips | Where-Object { $_.IP -ilike "10.*"}
 
-$selectedLogs
+
 
 }
 
 
-clear
-GetApacheLog "page1" "200" "mozilla" 
+
