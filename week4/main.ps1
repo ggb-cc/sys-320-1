@@ -2,6 +2,6 @@
 
 clear
 
-$ips = GetApacheLog "page1" "200" "mozilla"
+$ips = GetApacheLog "page1" "200" "mozilla" | Group-Object IP
 
-$ips
+$ips | Select-Object Count, Name
