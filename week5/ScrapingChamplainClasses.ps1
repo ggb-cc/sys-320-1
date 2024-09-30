@@ -3,7 +3,7 @@
 #http://10.0.17.30/Courses.html
 
 function gatherClasses(){
-    $page = Invoke-WebRequest -TimeoutSec 10 http://10.0.17.30/Courses.html
+    $page = Invoke-WebRequest -TimeoutSec 2 http://10.0.17.30/Courses.html
 
     $trs = $page.ParsedHtml.body.getElementsByTagName("tr")
     $fullTable = @()
@@ -36,9 +36,24 @@ for ($i = 0 ; $i -lt $fullTable.Length; $i++)
 {
 
     $days = @()
-    if($fullTable[$i].Days -ilike "Mon"
 
+    if($fullTable[$i].Days -ilike "M*"){  $days += "Monday"}
+
+    if($fullTable[$i].Days -ilike "*T[TWF]*"){  $days += "Tuesday"}
+
+    Elseif($fullTable[$i].Days -ilike "T"){  $days += "Tuesday"}
+
+    if($fullTable[$i].Days -ilike "*W*"){  $days += "Wednesday"}
+
+    if($fullTable[$i].Days -ilike "*TH*"){  $days += "Thursday"}
+
+    if($fullTable[$i].Days -ilike "*F*"){  $days += "Friday"}
+
+    $fullTable[$i].Days = $days
+
+    
 }
+return $fullTable
 }
 
 
