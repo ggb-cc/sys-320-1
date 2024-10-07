@@ -60,11 +60,9 @@ while($operation){
         #              - If true is returned, do not continue and inform the user
         
 
-        if (checkUser($name)){
-            Write-Host "User already exists, returning to menu" # my "d" key no longer works?
-        }
-
-
+        if (-Not (checkUser$name))
+        {
+        
         # TODO: Create a function called checkPassword in String-Helper that:
         #              - Checks if the given string is at least 6 characters
         #              - Checks if the given string contains at least 1 special character, 1 number, and 1 letter
@@ -74,9 +72,24 @@ while($operation){
         #              - If false is returned, do not continue and inform the user
         #              - If true is returned, continue with the rest of the function
 
-        #createAUser $name $password
+            if (checkPassword(`
+            [System.Runtime.InteropServices.Marshal]::PtrToStringAuto(`
+            [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($password)))) # unsure if safe
+            {
+                createAUser $name $password
 
-        Write-Host "User: $name is created." | Out-String
+                Write-Host "User: $name is created." | Out-String
+            }
+            else 
+            {
+                write-host "`nPassword does not meet requirements, returning to menu`n"
+            }
+            
+        }
+        else
+        {
+        Write-Host "`nUser already exists, returning to menu`n" 
+        }
     }
 
 
@@ -86,10 +99,16 @@ while($operation){
         $name = Read-Host -Prompt "Please enter the username for the user to be removed"
 
         # TODO: Check the given username with the checkUser function.
-
+        if ( checkUser $name)
+        {
         removeAUser $name
 
         Write-Host "User: $name Removed." | Out-String
+        }
+        else 
+        {
+        write-host "`nUser not found, returning to menu`n"
+        }
     }
 
 
@@ -98,12 +117,19 @@ while($operation){
 
 
         $name = Read-Host -Prompt "Please enter the username for the user to be enabled"
-
         # TODO: Check the given username with the checkUser function.
+
+        if ( checkUser $name)
+        {
 
         enableAUser $name
 
         Write-Host "User: $name Enabled." | Out-String
+        }
+        else 
+        {
+        write-host "`nUser not found, returning to menu`n"
+        }
     }
 
 
@@ -113,10 +139,16 @@ while($operation){
         $name = Read-Host -Prompt "Please enter the username for the user to be disabled"
 
         # TODO: Check the given username with the checkUser function.
-
+        if (checkUser $name)
+        {
         disableAUser $name
 
         Write-Host "User: $name Disabled." | Out-String
+        }
+        else
+        {
+        write-host "`nUser not found, returning to menu`n"        
+        }
     }
 
 
@@ -126,10 +158,17 @@ while($operation){
 
         # TODO: Check the given username with the checkUser function.
 
-        $userLogins = getLogInAndOffs 90
+        if (checkUser $name) {
+        $userLogins = getLogInAndOffs | Read-Host -Prompt "`nPlease enter the number of days to view logs from`n"
         # TODO: Change the above line in a way that, the days 90 should be taken from the user
 
         Write-Host ($userLogins | Where-Object { $_.User -ilike "*$name"} | Format-Table | Out-String)
+        }
+        else
+        {
+        write-host "`nUser not found, returning to menu`n"        
+        }
+        
     }
 
 
@@ -138,22 +177,35 @@ while($operation){
         $name = Read-Host -Prompt "Please enter the username for the user's failed login logs"
 
         # TODO: Check the given username with the checkUser function.
-
-        $userLogins = getFailedLogins 90
+        if (checkUser $name) { #(<>)
+        $userLogins = getFailedLogins | Read-Host -Prompt "`nPlease enter the number of days to view logs from`n"
         # TODO: Change the above line in a way that, the days 90 should be taken from the user
 
         Write-Host ($userLogins | Where-Object { $_.User -ilike "*$name"} | Format-Table | Out-String)
+        }
+        else{
+        write-host "`nUser not found, returning to menu`n"        
+        }
     }
-
 
     # TODO: Create another choice "List at Risk Users" that
     #              - Lists all the users with more than 10 failed logins in the last <User Given> days.  
     #                (You might need to create some failed logins to test)
     #              - Do not forget to update prompt and option numbers
     
+    elseif($choice -eq 10){
+        
+    }
+
+
+
+
     # TODO: If user enters anything other than listed choices, e.g. a number that is not in the menu   
     #       or a character that should not be accepted. Give a proper message to the user and prompt again.
     
+    elseif($choice -eq 11){
+        
+    }
 
 }
 

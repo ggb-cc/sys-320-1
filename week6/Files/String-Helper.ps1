@@ -29,10 +29,15 @@ return $allines
 }
 
 function checkPassword($password){
-if ( $password.Length -le 6 -and `
-     $password -match "*[0-9]*" -and`
-)
 
+$regex = [regex] ''
 
+if ( ($password.Length -ge 6)      -and `
+     ($password -match ".*[0-9]*")  -and `
+     ($password -imatch ".*[a-z]*") -and `
+     ($password -match ".*[``!@#$%^&*()_+:`"><,./\`[`]?]*")){ # need regex here
 
+      return $true
+      }
+      return $false
 }
