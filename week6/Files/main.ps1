@@ -14,13 +14,14 @@ $Prompt += "6 - Disable a User`n"
 $Prompt += "7 - Get Log-In Logs`n"
 $Prompt += "8 - Get Failed Log-In Logs`n"
 $Prompt += "9 - Exit`n"
+$Prompt += "10 - List at Risk Users`n"
 
 
 
 $operation = $true
 
 while($operation){
-
+clear
     
     Write-Host $Prompt | Out-String
     $choice = Read-Host 
@@ -60,7 +61,7 @@ while($operation){
         #              - If true is returned, do not continue and inform the user
         
 
-        if (-Not (checkUser$name))
+        if (-Not (checkUser $name))
         {
         
         # TODO: Create a function called checkPassword in String-Helper that:
@@ -88,7 +89,7 @@ while($operation){
         }
         else
         {
-        Write-Host "`nUser already exists, returning to menu`n" 
+            Write-Host "`nUser already exists, returning to menu`n" 
         }
     }
 
@@ -101,13 +102,13 @@ while($operation){
         # TODO: Check the given username with the checkUser function.
         if ( checkUser $name)
         {
-        removeAUser $name
+            removeAUser $name
 
-        Write-Host "User: $name Removed." | Out-String
+            Write-Host "User: $name Removed." | Out-String
         }
         else 
         {
-        write-host "`nUser not found, returning to menu`n"
+            write-host "`nUser not found, returning to menu`n"
         }
     }
 
@@ -159,7 +160,8 @@ while($operation){
         # TODO: Check the given username with the checkUser function.
 
         if (checkUser $name) {
-        $userLogins = getLogInAndOffs | Read-Host -Prompt "`nPlease enter the number of days to view logs from`n"
+        $input = read-Host -Prompt "`nPlease enter the number of days to view logs from`n"
+        $userLogins = getLogInAndOffs $input
         # TODO: Change the above line in a way that, the days 90 should be taken from the user
 
         Write-Host ($userLogins | Where-Object { $_.User -ilike "*$name"} | Format-Table | Out-String)
@@ -177,8 +179,9 @@ while($operation){
         $name = Read-Host -Prompt "Please enter the username for the user's failed login logs"
 
         # TODO: Check the given username with the checkUser function.
-        if (checkUser $name) { #(<>)
-        $userLogins = getFailedLogins | Read-Host -Prompt "`nPlease enter the number of days to view logs from`n"
+        if (checkUser $name) { 
+        $input = read-Host -Prompt "`nPlease enter the number of days to view logs from`n"
+        $userLogins = getFailedLogins $input
         # TODO: Change the above line in a way that, the days 90 should be taken from the user
 
         Write-Host ($userLogins | Where-Object { $_.User -ilike "*$name"} | Format-Table | Out-String)
@@ -193,8 +196,11 @@ while($operation){
     #                (You might need to create some failed logins to test)
     #              - Do not forget to update prompt and option numbers
     
-    elseif($choice -eq 10){
-        
+    elseif($choice -eq 10)
+    {
+        $input = read-Host -Prompt "`nPlease enter the number of days you would like to scan"
+        $failedLogins = getFailedLogins $input | Group-object User
+        $failedLogins | Where-object { $_.count -gt 10}| select count, name |out-string
     }
 
 
@@ -203,10 +209,11 @@ while($operation){
     # TODO: If user enters anything other than listed choices, e.g. a number that is not in the menu   
     #       or a character that should not be accepted. Give a proper message to the user and prompt again.
     
-    elseif($choice -eq 11){
-        
+    else
+    {
+    write-host "User input not understood" | out-string      
     }
-
+    pause
 }
 
 
