@@ -64,3 +64,11 @@ function getFailedLogins($timeBack){
 
     return $failedloginsTable
 } # End of function getFailedLogins
+
+
+Function getAtRiskUsers($time)
+{
+        
+        $failedLogins = getFailedLogins $time | Group-object User
+        return $failedLogins | Where-object { $_.count -gt 10}| select count, name 
+}
