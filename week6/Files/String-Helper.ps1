@@ -27,3 +27,12 @@ for($j=0; $j -lt $splitted.Count; $j++){
 
 return $allines
 }
+
+function checkPassword($password){
+if ( $password.Length -le 6 -and `
+     $password -match "*[0-9]*" -and`
+)
+
+
+
+}

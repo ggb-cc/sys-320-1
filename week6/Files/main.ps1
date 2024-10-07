@@ -49,18 +49,20 @@ while($operation){
         $name = Read-Host -Prompt "Please enter the username for the new user"
         $password = Read-Host -AsSecureString -Prompt "Please enter the password for the new user"
 
+
+
         # TODO: Create a function called checkUser in Users that: 
         #              - Checks if user a exists. 
         #              - If user exists, returns true, else returns false
-
-        if (checkUser $name){
-        
-        }
 
         # TODO: Check the given username with your new function.
         #              - If false is returned, continue with the rest of the function
         #              - If true is returned, do not continue and inform the user
         
+
+        if (checkUser($name)){
+            Write-Host "User already exists, returning to menu" # my "d" key no longer works?
+        }
 
 
         # TODO: Create a function called checkPassword in String-Helper that:
@@ -72,7 +74,7 @@ while($operation){
         #              - If false is returned, do not continue and inform the user
         #              - If true is returned, continue with the rest of the function
 
-        createAUser $name $password
+        #createAUser $name $password
 
         Write-Host "User: $name is created." | Out-String
     }

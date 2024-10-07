@@ -75,8 +75,11 @@ function enableAUser($name){
 }
 
 function checkUser($key){
-    $users = getEnabledUsers
-    $users += getDisabledUsers
+    
+    $user = Get-LocalUser | Where-Object { $_.name -ilike $key}
+    if ($user){
+    return $True
+    }
 
-    return $users | Get-Item $key
+    return $false
 }
