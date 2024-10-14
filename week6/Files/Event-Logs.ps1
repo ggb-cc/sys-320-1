@@ -70,5 +70,5 @@ Function getAtRiskUsers($time)
 {
         
         $failedLogins = getFailedLogins $time | Group-object User
-        return $failedLogins | Where-object { $_.count -gt 10}| select count, name 
+        return ($failedLogins | Where-object { $_.count -gt 10}| select count, name)
 }

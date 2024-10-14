@@ -25,20 +25,21 @@ Get-ScheduledTask | Where-Object { $_.TaskName -ilike "myTask" }
 
 }
 
-function DiasableAutoRun()
-{
-$scheduledTasks = Get-ScheduledTask | Where-Object { $_.TaskName -ilike "myTask"}
+function DisableAutoRun()
+    {
+    $scheduledTasks = Get-ScheduledTask | Where-Object { $_.TaskName -ilike "myTask"}
 
-if ($scheduledTasks -ne $null)
-{
-    write-host "Unregistering the task." | Out-String
-    Unregister-ScheduledTask -TaskName 'myTask' -Confirm:$false
+    if ($scheduledTasks -ne $null)
+    {
+        write-host "Unregistering the task." | Out-String
+        Unregister-ScheduledTask -TaskName 'myTask' -Confirm:$false
+    }
+    else
+    {
+        write-host "the task is not registered." | Out-String 
+    }
+
+
+    
 }
-else
-{
-    write-host "the task is not registered." | Out-String 
-}
 
-
-
-}

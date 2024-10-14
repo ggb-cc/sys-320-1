@@ -1,14 +1,14 @@
+clear
 
-
-function readConfiguration(){
-    cd..
-    $fileData = (get-content Users\champuser\Desktop\sys-320-1\week7\Configuration.txt).`
+function getConfiguration(){
+    
+    $fileData = (get-content C:\Users\champuser\Desktop\sys-320-1\week7\Configuration.txt).`
         Split([Environment]::NewLine)
     $formattedData = [pscustomobject] @{
                                         "Days" = $fileData[0]; `
                                         "Time" = $fileData[1];
                                        }
-    $formattedData | Format-Table
+    return $formattedData
 }
 
 function editConfiguration(){
@@ -18,7 +18,7 @@ function editConfiguration(){
     $time = read-host -Prompt "Enter New value for time"
         if ($time -match "[0-9]{0,1}.:[0-9]{2}\s[AP]M"){
             cd..
-            set-content -path Users\champuser\Desktop\sys-320-1\week7\Configuration.txt -Value "$days`n$time"
+            set-content -path C:\Users\champuser\Desktop\sys-320-1\week7\Configuration.txt -Value "$days`n$time"
         
         }
         else{
@@ -34,7 +34,7 @@ function configurationMenu(){
 
 $menuLoop = $true
 While($menuLoop){
-clear
+#clear
 $prompt = @()
 $prompt += "`n1 : View Configuration"
 $prompt += "`n2 : Edit Configuration"
@@ -45,17 +45,17 @@ $input = read-host
 
 if ($input -eq "1")
 {
-    clear
+    #clear
     Write-Host " - VIEW CONFIG FILE - "
 
-    readConfiguration
-
+    $configData = getConfiguration
+    $configData | Format-Table
     Pause
 }
  
 elseif ($input -eq "2")
 {
-    clear
+    #clear
     Write-Host " - EDIT CONFIG FILE - `n"
 
     editConfiguration
@@ -76,4 +76,4 @@ else
 }
 
 
-configurationMenu
+#configurationMenu

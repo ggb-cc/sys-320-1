@@ -13,4 +13,4 @@ Send-MailMessage -From $from -to $to -Subject $subject -Body $body -SmtpServer "
 }
 clear 
 
-sendAlertEmail 
+#sendAlertEmail "Body of email"
