@@ -1,6 +1,6 @@
 #! /bin/bash
 
-logFile="/var/log/apache2/access.log"
+logFile="/var/log/apache2/access.log.1"
 
 function displayAllLogs(){
 	cat "$logFile"
@@ -46,13 +46,6 @@ function frequentVisitors(){
 # the output should be almost identical to histogram
 # only with daily number of visits that are greater than 10
 
-echo histogram | while read -r line
-do
-
-
-
-done
-
 
 }
 
@@ -68,6 +61,7 @@ function: suspiciousVisitors
 
 while :
 do
+	printf "\n"
 	echo "PLease select an option:"
 	echo "[1] Display all Logs"
 	echo "[2] Display only IPS"
