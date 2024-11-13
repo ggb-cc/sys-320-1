@@ -76,30 +76,7 @@ function suspiciousVisitors(){
 # it is welcomed.
 
 
-
-
-
-cat "${iocFile}" | while read -r line
-do
-	echo displayAllLogs | grep "${line}"
-done
-
-
-
-: '
-local logs=displayAllLogs
-local iocLineCount=$(wc -l ioc.txt | cut -d" " -f1)
-
-#echo "${iocLineCount}"
-
-for (( i=1; i<="${iocLineCount}"; i++ ));
-do
-
-echo logs | grep
-
-done
-'
-
+displayAllLogs | grep -f ioc.txt | cut -d' ' -f1 | sort -n | uniq -c
 
 }
 
@@ -148,6 +125,9 @@ do
 	elif [[ "$userInput" == "6" ]]; then
 		echo "Displaying Suspicious visitors:"
 		suspiciousVisitors
+
+	else
+		echo "Invalid input, please enter a valid option"
 
 #Display a message, if an invalid input is given
 	fi
