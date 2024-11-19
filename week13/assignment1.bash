@@ -62,9 +62,39 @@ echo -n "Enter a course code: "
 read userInput3
 echo ""
 
-cat "${courseFile}" | cut -d';' -f1,2,3,4,5,6,7,8,10 | [[ awk -F3 ]]| \
-grep "$userInput3" | \
+
+
+cat "${courseFile}" | while read -r line
+do
+
+
+code=$(echo "$line" | cut -d' ' -f1)
+
+if [[ "$code" == "$userInput3" ]]; then
+
+
+openSeats=$(echo "$line" | cut -d';' -f3)
+
+
+if (( $openSeats > 0 )); then
+
+
+
+	echo "$line" | cut -d';' -f1,2,3,4,5,6,7 | \
 sed 's/;/ | /g'
+
+fi
+
+
+fi
+
+
+
+
+done
+
+
+
 
 
 
