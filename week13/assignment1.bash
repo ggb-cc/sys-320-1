@@ -73,7 +73,7 @@ code=$(echo "$line" | cut -d' ' -f1)
 if [[ "$code" == "$userInput3" ]]; then
 
 
-openSeats=$(echo "$line" | cut -d';' -f3)
+openSeats=$(echo "$line" | cut -d';' -f4)
 
 
 if (( $openSeats > 0 )); then
