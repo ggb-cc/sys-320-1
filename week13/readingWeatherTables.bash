@@ -8,8 +8,17 @@ rawPage=$(curl -sL "$link")
 
 echo "${rawPage}" > rawPage.txt
 
-t1=$(awk ' /<td>|<br>/ {print}' rawPage.txt)
+#awk '$1==/<br>/{f=1} f{print; if ($1==/<td>/) exit}' rawPage.txt | echo
 
-echo "$t1"
+
+trimedData=$(awk ' /<td>|<br>/ {print}' rawPage.txt | tr -d '\n' ) # | sed 's/\\n/ /g'
+
+
+
+
+echo "$trimedData"
+
+
+
 
 
