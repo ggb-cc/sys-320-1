@@ -37,7 +37,10 @@ function InternalNmap(){
 function ExternalListeningPorts(){
 # Todo-2: Complete the ExternalListeningPorts that will print the port and application
 # that is listening on that port from network (using ss utility)
-elpo=$(ss -ltpn | tail -n +2 | sed -e 's/[//g' | awk  -F"[[:space:]]+" '!/127.0.0./') # {print $4,$6}' ) #| tr -d "\"")
+
+# Im not even sure if this is correct because of the duplicate, this is probably very bad script
+elpo=$(ss -ltpn | awk  -F"[[:space:]]+" '!/127.0.0./ {print $4,$6}' | rev | cut -d ':' -f1,2 | rev | cut -d '"' -f1,2 | sed -e "s/users:((\"//g" | tail -n +2)
+
 }
 
 
@@ -50,15 +53,28 @@ ilpo=$(ss -ltpn | awk  -F"[[:space:]:(),]+" '/127.0.0./ {print $5,$9}' | tr -d "
 
 # Todo-3: If the program is not taking exactly 2 arguments, print helpmenu
 
-InternalListeningPorts
-
-ExternalListeningPorts
-
-echo "${ilpo}"
-echo -e "\n\n ----- \n\n"
-echo "${elpo}"
-
-
+if [ ! ${#} -eq 2 ]; then
+	HelpMenu
+elif [ $1 = '-s' ]; then
+	if [ $2 = 'internal' ]; then
+		InternalListeningPorts
+		echo "${ilpo}"
+	fi
+	if [ $2 = 'external' ]; then
+		ExternalListeningPorts
+		echo "${elpo}"
+	fi
+elif [ $1 = '-n' ]; then
+	if [ $2 = 'internal' ]; then
+		InternalNmap
+		echo "${rin}"
+	fi
+	if [ $2 = 'external' ]; then
+		ExternalNmap
+		echo "${rex}"
+	fi
+else
+	HelpMenu
 
 # Todo-4: Use getopts to accept options -n and -s (both will have an argument)
 # If the argument is not internal or external, call helpmenu
@@ -67,4 +83,4 @@ echo "${elpo}"
 # For instance: -n internal => will call NMAP on localhost
 #               -s external => will call ss on network (non-local)
 
-
+fi
