@@ -8,15 +8,38 @@ rawPage=$(curl -sL "$link")
 
 echo "${rawPage}" > rawPage.txt
 
-#awk '$1==/<br>/{f=1} f{print; if ($1==/<td>/) exit}' rawPage.txt | echo
+tableOneContents=$(cat rawPage.txt | \
+xmlstarlet format --html --recover 2>/dev/null | \
+xmlstarlet select --template --copy-of \
+"//html//body//table[1]" | \
+grep "<td>" | \
+sed 's/<td>//g' | \
+sed 's/<\/td>&#13;//g')
 
 
-trimedData=$(awk ' /<td>|<br>/ {print}' rawPage.txt | tr -d '\n' ) # | sed 's/\\n/ /g'
+tableTwoContents=$(cat rawPage.txt | \
+xmlstarlet format --html --recover 2>/dev/null | \
+xmlstarlet select --template --copy-of \
+"//html//body//table[2]" | \
+grep "<td>" | \
+sed -n '2~2!p' | \
+sed 's/<td>//g' | \
+sed 's/<\/td>&#13;//g')
+
+
+numLines=$(echo "$tableTwoContents" | wc --lines)
+
+#echo  "$tableTwoContents"
+
+for ((i = 1 ; i <= numLines ; i ++)); do
+
+echo $(echo "${tableTwoContents}" | head -n ${i} | tail -n 1) \
+$(echo "${tableOneContents}" | sed -n '2~2!p' | head -n ${i} | tail -n 1) \
+$(echo "${tableOneContents}" | sed -n '1~2!p' | head -n ${i} | tail -n 1)
 
 
 
-
-echo "$trimedData"
+done
 
 
 
